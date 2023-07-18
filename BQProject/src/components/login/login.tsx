@@ -1,12 +1,20 @@
-import { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './login.css';
 import { login } from '../../api/login';
 
 function Login() {
     const [email, setEmail] = useState('');
+    const navigate = useNavigate();
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-
+    
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setEmail(event.target.value)
     }
@@ -18,10 +26,17 @@ function Login() {
     const handleLogin = async () => {
       console.log('email: ' + email);
       console.log('password: ' + password);
+     
       try {
         const resp = await login(email, password);
         setErrorMessage('');
+        //console.log('Response data:', resp.data);
+        const user = resp.data.user;
+        console.log('user:', user);
+        const role = user.role;
+        console.log('role: ', role);
         alert('login correcto' + resp.data.accessToken);
+        navigate('/waiterBreakfast');
       } catch (e) {
         //alert("mal echo")
         setErrorMessage("login incorrecto");
