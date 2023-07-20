@@ -8,15 +8,14 @@ import WaiterLunch from "./components/waiter/waiterLunch";
 
 const App: React.FC = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/waiterBreakfast" element={<WaiterBreakfast />} />
-        <Route path="/waiterLunch" element={<WaiterLunch />} />
-              
-      </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/waiterBreakfast" element={<WaiterBreakfast />} />
+          <Route path="/waiterLunch" element={<WaiterLunch />} />
+        </Routes>
+      </BrowserRouter>
   );
 };
 
