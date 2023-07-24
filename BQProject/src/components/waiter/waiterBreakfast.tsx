@@ -6,7 +6,7 @@
 // }
 import React from 'react';
 import { Fragment, useState } from 'react'
-import { Disclosure, Menu, Transition, Listbox } from '@headlessui/react'
+import { Disclosure, Menu, Transition, Listbox, Dialog } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import ImageLogo from '../../assets/images/BQueenLogoPantallas.png'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
@@ -103,6 +103,29 @@ const people = [
     'https://e7.pngegg.com/pngimages/488/544/png-clipart-coffee-tables-round-table-wood-side-table-glass-angle.png',
   },
 ]
+const products = [
+  {
+    id: 1,
+    name: 'Hamburger',
+    href: '#',
+    color: 'Salmon',
+    price: '$10.00',
+    quantity: 1,
+    imageSrc: 'https://cdn-icons-png.flaticon.com/512/3075/3075977.png',
+    imageAlt: 'Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.',
+  },
+  {
+    id: 2,
+    name: 'Medium Stuff Satchel',
+    href: '#',
+    color: 'Blue',
+    price: '$5.00',
+    quantity: 1,
+    imageSrc: 'https://illustoon.com/photo/11612.png',
+    imageAlt:
+      'Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.',
+  },
+  ]
 
 function classTables(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -133,7 +156,6 @@ function Client() {
 
 function Table() {
   const [selected, setSelected] = useState(people[3])
-
   return (
     <Listbox value={selected} onChange={setSelected}>
       {({ open }) => (
@@ -206,9 +228,84 @@ function Table() {
 } 
 
 
-// Aquí es donde renderizamos los botones usando JSX
-//return (
-//export default function Example() {
+
+interface Product {
+  id: string;
+  imageSrc: string;
+  imageAlt: string;
+  href: string;
+  name: string;
+  price: string;
+  color: string;
+  quantity: number;
+}
+function Products({ products }: { products: Product[] }) {
+  return (
+    <div className="flex flex-col overflow-y-scroll bg-white shadow-xl">
+      <div className="overflow-y-auto px-4 py-6 sm:px-6">
+        <div className="flex items-start justify-between">
+          <h2 className="text-lg font-medium text-gray-900">Shopping cart</h2>
+        </div>
+        <div className="mt-8">
+          <div className="flow-root">
+            <ul role="list" className="-my-6 divide-y divide-gray-200">
+              {products.map((product) => (
+                <li key={product.id} className="flex py-6">
+                  <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                    <img
+                      src={product.imageSrc}
+                      alt={product.imageAlt}
+                      className="h-full w-full object-cover object-center"
+                    />
+                  </div>
+                  <div className="ml-4 flex flex-1 flex-col">
+                    <div>
+                      <div className="flex justify-between text-base font-medium text-gray-900">
+                        <h3>
+                          <a href={product.href}>{product.name}</a>
+                        </h3>
+                        <p className="ml-4">{product.price}</p>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-500">{product.color}</p>
+                    </div>
+                    <div className="flex flex-1 items-end justify-between text-sm">
+                      <p className="text-gray-500">Qty {product.quantity}</p>
+                      <div className="flex">
+                        <button
+                          type="button"
+                          className="font-medium text-indigo-600 hover:text-indigo-500"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
+        <div className="flex justify-between text-base font-medium text-gray-900">
+          <p>Subtotal</p>
+          <p>$262.00</p>
+        </div>
+        <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+        <div className="mt-6">
+          <a
+            href="#"
+            className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+          >
+            Checkout
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
   return (
     <>
     <Disclosure as="nav" className="bg-[#292D32]">
@@ -334,18 +431,22 @@ function Table() {
               ))}
             </div>
           </Disclosure.Panel>
+
         </>
-      )}
+        )}
+      
     </Disclosure>
     <Client />
     <Table />
-   </>                 
+    <Products products={products} />
+   </>
+
   );
 };
 
 
-  
-  
+
+
  
   
 
@@ -357,21 +458,3 @@ function Table() {
 
 export default BreakfastLunchButtons;
 
-// const buttonBreakfast: HTMLButtonElement = document.createElement('button');
-// buttonBreakfast.textContent = 'Desayuno';
-// buttonBreakfast.className = 'buttonBreakfast';
-
-// const buttonLunch: HTMLButtonElement = document.createElement('button');
-// buttonLunch.textContent = 'Almuerzo y Cena';
-// buttonLunch.className = 'buttonLunch';
-
-// document.body.appendChild(buttonBreakfast);
-// document.body.appendChild(buttonLunch); 
-
-// buttonBreakfast.addEventListener('click', () =>{
-//     console.log('Desayuno');
-// });
-
-// buttonLunch.addEventListener('click', () =>{
-//     console.log('Lunch');
-// });
