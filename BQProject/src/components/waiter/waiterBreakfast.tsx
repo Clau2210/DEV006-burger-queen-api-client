@@ -6,7 +6,7 @@
 // }
 import React from 'react';
 import { Fragment, useState } from 'react'
-import { Disclosure, Menu, Transition, Listbox, Dialog } from '@headlessui/react'
+import { Disclosure, Menu, Transition, Listbox  } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import ImageLogo from '../../assets/images/BQueenLogoPantallas.png'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
@@ -16,6 +16,18 @@ interface NavItem {
   href: string;
   current: boolean;
 }
+
+interface Product {
+  id: string;
+  imageSrc: string;
+  imageAlt: string;
+  href: string;
+  name: string;
+  price: number;
+  color: string;
+  quantity: number;
+}
+
 const navigation: NavItem[] = [
   { name: 'Desayuno', href: '#', current: true },
   { name: 'Almuerzo y cena', href: '#', current: false },
@@ -127,17 +139,14 @@ const products = [
   },
   ]
 
-function classTables(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 function Client() {
   return (
-    <div>
+    <div className='bg-[#292D32]'>
       {/* <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">
         Cliente
       </label> */}
-      <div className="relative mt-2 ml-3 rounded-md shadow-sm">
+      <div className="relative mt-2 ml-3 rounded-md shadow-sm  ">
         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 ml-4">
         </div>
         <input
@@ -161,7 +170,7 @@ function Table() {
       {({ open }) => (
         <>
           {/* <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">Mesas</Listbox.Label> */}
-          <div className="relative mt-2">
+          <div className="relative mt-2 bg-[#292D32]">
             <Listbox.Button className="relative w-100 ml-3 cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
               <span className="flex items-center">
                 <img src={selected.avatar} alt="" className="h-5 w-5 flex-shrink-0 rounded-full" />
@@ -228,23 +237,12 @@ function Table() {
 } 
 
 
-
-interface Product {
-  id: string;
-  imageSrc: string;
-  imageAlt: string;
-  href: string;
-  name: string;
-  price: string;
-  color: string;
-  quantity: number;
-}
 function Products({ products }: { products: Product[] }) {
   return (
-    <div className="flex flex-col overflow-y-scroll bg-white shadow-xl">
+    <div className="flex flex-col overflow-y-scroll bg-[#292D32] shadow-xl px-[180px]" >
       <div className="overflow-y-auto px-4 py-6 sm:px-6">
         <div className="flex items-start justify-between">
-          <h2 className="text-lg font-medium text-gray-900">Shopping cart</h2>
+          <h2 className="text-lg font-medium text-white">Productos</h2>
         </div>
         <div className="mt-8">
           <div className="flow-root">
@@ -260,20 +258,29 @@ function Products({ products }: { products: Product[] }) {
                   </div>
                   <div className="ml-4 flex flex-1 flex-col">
                     <div>
-                      <div className="flex justify-between text-base font-medium text-gray-900">
+                      <div className="flex justify-between text-base font-medium text-white">
                         <h3>
                           <a href={product.href}>{product.name}</a>
                         </h3>
                         <p className="ml-4">{product.price}</p>
                       </div>
-                      <p className="mt-1 text-sm text-gray-500">{product.color}</p>
+                      <select id="quantity-0"  className="rounded-md m-3 p-1 ">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                      </select>
                     </div>
                     <div className="flex flex-1 items-end justify-between text-sm">
                       <p className="text-gray-500">Qty {product.quantity}</p>
                       <div className="flex">
                         <button
                           type="button"
-                          className="font-medium text-indigo-600 hover:text-indigo-500"
+                          className="font-medium text-[#EE4D39] hover:text-[#E22F19]"
                         >
                           Remove
                         </button>
@@ -287,17 +294,17 @@ function Products({ products }: { products: Product[] }) {
         </div>
       </div>
       <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-        <div className="flex justify-between text-base font-medium text-gray-900">
+        <div className="flex justify-between text-base font-medium text-white">
           <p>Subtotal</p>
           <p>$262.00</p>
         </div>
-        <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+        <p className="mt-0.5 text-sm text-white">Envío e impuestos calculados al finalizar la compra.</p>
         <div className="mt-6">
           <a
             href="#"
-            className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+            className="flex items-center justify-center rounded-md border border-transparent bg-[#EE4D39] px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-[#F4AB4D]"
           >
-            Checkout
+            Enviar cocina
           </a>
         </div>
       </div>
@@ -308,7 +315,7 @@ function Products({ products }: { products: Product[] }) {
 
   return (
     <>
-    <Disclosure as="nav" className="bg-[#292D32]">
+    <Disclosure as="nav" className="bg-[#292D32] py-10">
       {({ open }) => (
        <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -436,25 +443,15 @@ function Products({ products }: { products: Product[] }) {
         )}
       
     </Disclosure>
+    <div className='flex justify-center bg-[#292D32]'>
     <Client />
     <Table />
+    </div>
     <Products products={products} />
    </>
 
   );
 };
-
-
-
-
- 
-  
-
-    
-    
-    
-  
-
 
 export default BreakfastLunchButtons;
 
