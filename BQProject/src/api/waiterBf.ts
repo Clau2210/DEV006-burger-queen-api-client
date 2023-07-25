@@ -1,0 +1,22 @@
+import { instance } from './base.api'
+import { Product } from '../components/waiter/waiterBreakfast'
+
+const endpoint = 'products';
+
+export const searchProducts = async (): Promise<Product[]> => {
+    try {
+      const response = await instance.get<Product[]>(endpoint, { 
+        headers: { 
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFuaXRhLmJvcmdAc3lzdGVycy54eXoiLCJpYXQiOjE2OTAzMTM3NjcsImV4cCI6MTY5MDMxNzM2Nywic3ViIjoiMSJ9.8Hbw5KFKeKpgz37vyLauARTrEiB0nRZ9_lnZOZ2ZsAM"
+        }
+      }); 
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error('Error fetching products from API: ' + error.message);
+          }
+          throw new Error('Error fetching products from API: Unknown error occurred');
+        }
+      };
+
