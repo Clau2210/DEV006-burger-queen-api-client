@@ -329,7 +329,7 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
                           <option value="8">8</option>
                         </select>
                           {/* <p className="text-white">Cantidad {selectedQuantities[index]}</p> */}
-                          <p className="text-white">Total: {product.price * selectedQuantities[index]}</p>
+                          <p className="text-white">Total pedido: {product.price * selectedQuantities[index]}</p>
                       </div>
                       <div className="flex flex-1 items-end justify-between text-sm">
                         {/* <p className="text-white">Cantidad {product.quantity}</p> */}
