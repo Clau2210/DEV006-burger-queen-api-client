@@ -1,3 +1,6 @@
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
@@ -5,12 +8,13 @@ import { login } from '../../api/login';
 import ImageLogo from '../../assets/images/Bq.png'
 import '@fontsource/atma'
 
+let token ='';
+
 function Login() {
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setEmail(event.target.value)
     }
@@ -34,6 +38,8 @@ function Login() {
         console.log('user:', user);
         const role = user.role;
         console.log('role: ', role);
+        token = resp.data.accessToken;
+        console.log(token);
         alert('login correcto' + resp.data.accessToken);
         navigate('/waiterBreakfast');
       } catch (e) {
@@ -114,5 +120,5 @@ function Login() {
       </>
     );
 }
-
+export { token }; 
 export default Login
