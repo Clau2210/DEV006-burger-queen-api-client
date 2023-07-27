@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
@@ -256,7 +257,38 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
 
 
   function Products({ products }: { products: Product[] }) {
-    const [selectedQuantity, setSelectedQuantity] = useState<number>(0);
+    const [selectedQuantities, setSelectedQuantities] = useState<number[]>(Array(products.length).fill(0));
+    const [totalPrice, setTotalPrice] = useState<number>(0);
+
+
+    useEffect(() => {
+      // let total = 0;
+      const total = selectedQuantities.reduce((acc, quantity, index) => {
+        return acc + quantity * products[index].price;
+      }, 0);
+
+      setTotalPrice(total);
+    }, [selectedQuantities, products]);
+
+      // Calcular el total inicial al cargar el componente
+  useEffect(() => {
+    const initialTotal = selectedQuantities.reduce((acc, quantity, index) => {
+      return acc + quantity * products[index].price;
+    }, 0);
+
+    setTotalPrice(initialTotal);
+  }, [products]);
+
+  
+    const handleQuantityChange = (index: number, value: number) => {
+      // Copiar el array actual de selectedQuantities y actualizar la cantidad para el índice específico
+      const updatedQuantities = [...selectedQuantities];
+      updatedQuantities[index] = value;
+
+      setSelectedQuantities(updatedQuantities);
+    
+    };
+
     return (
       <div className="flex flex-col overflow-y-scroll bg-[#292D32] shadow-xl px-[180px]" >
         <div className="overflow-y-auto px-4 py-6 sm:px-6">
@@ -266,7 +298,7 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
           <div className="mt-8">
             <div className="flow-root">
               <ul role="list" className="-my-6 divide-y divide-gray-200">
-                {products.map((product) => (
+                {products.map((product, index) => (
                   <li key={product.id} className="flex py-6">
                     <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                       <img
@@ -283,7 +315,9 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
                           </h3>
                           <p className="ml-4">{product.price}</p>
                         </div>
-                        <select id="quantity-0" className="rounded-md m-3 p-1 " value={selectedQuantity} onChange={(e)=> setSelectedQuantity(Number(e.target.value))}>
+                        <select id={`quantity-${index}`} className="rounded-md m-3 p-1 " value={selectedQuantities[index]} onChange={(e)=>
+                          handleQuantityChange(index, Number(e.target.value))}
+                          >
                           <option value="0">0</option>
                           <option value="1">1</option>
                           <option value="2">2</option>
@@ -294,8 +328,8 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
                           <option value="7">7</option>
                           <option value="8">8</option>
                         </select>
-                          <p className="text-white">Cantidad {selectedQuantity}</p>
-                          <p className="text-white">Total: {product.price * selectedQuantity}</p>
+                          {/* <p className="text-white">Cantidad {selectedQuantities[index]}</p> */}
+                          <p className="text-white">Total: {product.price * selectedQuantities[index]}</p>
                       </div>
                       <div className="flex flex-1 items-end justify-between text-sm">
                         {/* <p className="text-white">Cantidad {product.quantity}</p> */}
@@ -318,8 +352,10 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
         </div>
         <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
           <div className="flex justify-between text-base font-medium text-white">
-            <p>Subtotal</p>
-            <p>$262.00</p>
+            <p>Total:</p>
+            {/* <p>$262.00</p> */}
+            <p>{totalPrice.toFixed(0)}</p>
+            {/* <p className="text-white">Total: {total}</p> */}
           </div>
           <p className="mt-0.5 text-sm text-white">Envío e impuestos calculados al finalizar la compra.</p>
           <div className="mt-6">
@@ -364,7 +400,7 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
                           key={item.name}
                           href={item.href}
                           className={classNames(
-                            item.current ? 'bg-[#EE4D39] text-[#292D32] hover:text-white' : 'text-[#292D32] bg-[#F4AB4D] hover:text-white',
+                            item.current ? 'bg-[#EE4D39] text-[#292D32' : 'text-[#292D32] bg-[#F4AB4D] hover:text-white',
                             'rounded-md px-6 py-3 text-sm font-medium'
                           )}
                           aria-current={item.current ? 'page' : undefined}
