@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
@@ -11,6 +12,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import ImageLogo from '../../assets/images/BQueenLogoPantallas.png'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { searchProducts } from '../../api/waiterBf';
+import { token } from '../login/login';
 
 interface NavItem {
   name: string;
@@ -22,7 +24,7 @@ export interface Product {
   id: string;
   name: string;
   price: number;
-  imageSrc: string;
+  image: string;
   imageAlt: string;
   type: string;
   dateEntry: string;
@@ -255,6 +257,38 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
 
 
   function Products({ products }: { products: Product[] }) {
+    const [selectedQuantities, setSelectedQuantities] = useState<number[]>(Array(products.length).fill(0));
+    const [totalPrice, setTotalPrice] = useState<number>(0);
+
+
+    useEffect(() => {
+      // let total = 0;
+      const total = selectedQuantities.reduce((acc, quantity, index) => {
+        return acc + quantity * products[index].price;
+      }, 0);
+
+      setTotalPrice(total);
+    }, [selectedQuantities, products]);
+
+      // Calcular el total inicial al cargar el componente
+  useEffect(() => {
+    const initialTotal = selectedQuantities.reduce((acc, quantity, index) => {
+      return acc + quantity * products[index].price;
+    }, 0);
+
+    setTotalPrice(initialTotal);
+  }, [products]);
+
+  
+    const handleQuantityChange = (index: number, value: number) => {
+      // Copiar el array actual de selectedQuantities y actualizar la cantidad para el índice específico
+      const updatedQuantities = [...selectedQuantities];
+      updatedQuantities[index] = value;
+
+      setSelectedQuantities(updatedQuantities);
+    
+    };
+
     return (
       <div className="flex flex-col overflow-y-scroll bg-[#292D32] shadow-xl px-[180px]" >
         <div className="overflow-y-auto px-4 py-6 sm:px-6">
@@ -264,11 +298,11 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
           <div className="mt-8">
             <div className="flow-root">
               <ul role="list" className="-my-6 divide-y divide-gray-200">
-                {products.map((product) => (
+                {products.map((product, index) => (
                   <li key={product.id} className="flex py-6">
                     <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                       <img
-                        src={product.imageSrc}
+                        src={product.image}
                         alt={product.imageAlt}
                         className="h-full w-full object-cover object-center"
                       />
@@ -281,7 +315,10 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
                           </h3>
                           <p className="ml-4">{product.price}</p>
                         </div>
-                        <select id="quantity-0" className="rounded-md m-3 p-1 ">
+                        <select id={`quantity-${index}`} className="rounded-md m-3 p-1 " value={selectedQuantities[index]} onChange={(e)=>
+                          handleQuantityChange(index, Number(e.target.value))}
+                          >
+                          <option value="0">0</option>
                           <option value="1">1</option>
                           <option value="2">2</option>
                           <option value="3">3</option>
@@ -291,15 +328,18 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
                           <option value="7">7</option>
                           <option value="8">8</option>
                         </select>
+                          {/* <p className="text-white">Cantidad {selectedQuantities[index]}</p> */}
+                          <p className="text-white">Total pedido: {product.price * selectedQuantities[index]}</p>
                       </div>
                       <div className="flex flex-1 items-end justify-between text-sm">
-                        <p className="text-gray-500">Qty {product.quantity}</p>
+                        {/* <p className="text-white">Cantidad {product.quantity}</p> */}
                         <div className="flex">
                           <button
                             type="button"
-                            className="font-medium text-[#EE4D39] hover:text-[#E22F19]"
+                            // className="font-medium text-[#EE4D39] hover:text-[#E22F19]"
+                            className="flex items-center justify-center rounded-md border border-transparent bg-[#E22f19] px-3 py-2 text-base font-medium text-white shadow-sm hover:bg-[#F4AB4D]"
                           >
-                            Remove
+                            Eliminar
                           </button>
                         </div>
                       </div>
@@ -312,8 +352,10 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
         </div>
         <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
           <div className="flex justify-between text-base font-medium text-white">
-            <p>Subtotal</p>
-            <p>$262.00</p>
+            <p>Total:</p>
+            {/* <p>$262.00</p> */}
+            <p>{totalPrice.toFixed(0)}</p>
+            {/* <p className="text-white">Total: {total}</p> */}
           </div>
           <p className="mt-0.5 text-sm text-white">Envío e impuestos calculados al finalizar la compra.</p>
           <div className="mt-6">
@@ -358,8 +400,8 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
                           key={item.name}
                           href={item.href}
                           className={classNames(
-                            item.current ? 'bg-[#E22F19] text-white' : 'text-gray-300 bg-[#F4AB4D] hover:text-white',
-                            'rounded-md px-3 py-2 text-sm font-medium'
+                            item.current ? 'bg-[#EE4D39] text-[#292D32' : 'text-[#292D32] bg-[#F4AB4D] hover:text-white',
+                            'rounded-md px-6 py-3 text-sm font-medium'
                           )}
                           aria-current={item.current ? 'page' : undefined}
                         >
@@ -372,7 +414,7 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                   <button
                     type="button"
-                    className="rounded-full bg-[#292D32] p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    className="rounded-full bg-[#292D32] p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-[#f14850] focus:ring-offset-2 focus:ring-offset-gray-800"
                   >
                     <span className="sr-only">View notifications</span>
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
@@ -381,10 +423,10 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">
                     <div>
-                      <Menu.Button className="flex rounded-full bg-[#292D32] text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                      <Menu.Button className="flex rounded-full bg-[#292D32] text-sm focus:outline-none ring-1 ring-[#f14850] ring-offset-2 focus:ring-offset-gray-800">
                         <span className="sr-only">Open user menu</span>
                         <img
-                          className="my-0 w-[100px] justify-center"
+                          className="my-0 w-[150px] justify-center"
                           src={ImageLogo}
                           alt="Burguer Queen"
                         />
