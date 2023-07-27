@@ -6,7 +6,6 @@ import './index.css'
 //import Login from './components/login/login.tsx';
 //import './components/login/login.css';
 import App from './App.tsx';
-<link rel="icon" href="../../Bq.ico" type="image/x-icon" />
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 
