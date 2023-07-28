@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -40,6 +41,8 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
   // Estos son los handlers para los eventos de clic en los botones
 
   const [products, setProducts] = useState([]);
+  const [clientName, setClientName] = useState<string>(''); // Estado para almacenar el nombre del cliente
+
 
   useEffect(()=>{
     searchProducts()
@@ -50,6 +53,18 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
     .catch();
   }, []);
   
+  const handleClientNameChange = (newName: string) => {
+    setClientName(newName); // Almacena el nombre del cliente en el estado
+  };
+
+  const handleSendToKitchen = (name: string) => {
+    // Aquí puedes utilizar la función para enviar a la cocina que necesites
+    // Puedes enviar el nombre del cliente (name) y la lista de productos (products)
+    // Por ejemplo, podrías usar una función saveOrderToKitchen(name, products)
+    // saveOrderToKitchen(name, products).then(...).catch(...);
+    console.log('Nombre del cliente:', name);
+    console.log('Productos seleccionados:', products);
+  };
 
   return (
     <>
@@ -152,12 +167,14 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
         )}
 
       </Disclosure>
-      
+    
       <div className='flex justify-center bg-[#292D32]'>
-        <ClientInput />
+        {/* <ClientInput /> */}
+        <ClientInput onClientNameChange={handleClientNameChange} />                   
         <TableSelect />
       </div>
-      <ProductsList products={products} />
+      <ProductsList products={products} onSendToKitchen={handleSendToKitchen} />
+      {/* <ProductsList products={products} /> */}
     </>
 
   );
