@@ -8,8 +8,6 @@ import { login } from '../../api/login';
 import ImageLogo from '../../assets/images/Bq.png'
 import '@fontsource/atma'
 
-let token ='';
-
 function Login() {
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
@@ -31,16 +29,13 @@ function Login() {
       console.log('password: ' + password);
      
       try {
-        const resp = await login(email, password);
         setErrorMessage('');
+        const resp = await login(email, password);        
         //console.log('Response data:', resp.data);
-        const user = resp.data.user;
-        console.log('user:', user);
-        const role = user.role;
-        console.log('role: ', role);
-        token = resp.data.accessToken;
-        console.log(token);
-        alert('login correcto' + resp.data.accessToken);
+        //const user = resp.data.user;
+        //console.log('user:', user);
+        //const role = user.role;
+        //console.log('role: ', role);
         navigate('/waiterBreakfast');
       } catch (e) {
         //alert("mal echo")
@@ -120,5 +115,5 @@ function Login() {
       </>
     );
 }
-export { token }; 
+
 export default Login
