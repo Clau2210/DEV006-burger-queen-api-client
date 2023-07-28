@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-floating-promises */
@@ -14,6 +15,7 @@ import { searchProducts } from '../../api/waiterBf';
 import  ClientInput  from '../waiter/client';
 import TableSelect from '../waiter/table';
 import ProductsList from '../waiter/product';
+import { format } from 'date-fns';
 
 function classNames(...classes: string[]): string {
   return classes.filter(Boolean).join(' ')
@@ -62,6 +64,8 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
     // Puedes enviar el nombre del cliente (name) y la lista de productos (products)
     // Por ejemplo, podrías usar una función saveOrderToKitchen(name, products)
     // saveOrderToKitchen(name, products).then(...).catch(...);
+    const currentDateTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    console.log(currentDateTime);
     console.log('Nombre del cliente:', name);
     console.log('Productos seleccionados:', products);
   };
