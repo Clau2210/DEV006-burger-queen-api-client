@@ -25,7 +25,9 @@ interface ProductsProps {
 
 
 const ProductsList: React.FC<ProductsProps> = ({ products, onSendToKitchen }) => {
-  const [selectedQuantities, setSelectedQuantities] = useState<number[]>(Array(products.length).fill(0));
+  const [selectedQuantities, setSelectedQuantities] = useState<number[]>(
+    Array(products.length).fill(0)
+  );
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
 const handleSendToKitchen = () => {
@@ -34,16 +36,6 @@ const handleSendToKitchen = () => {
 };
 
 
-  useEffect(() => {
-    // let total = 0;
-    const total = selectedQuantities.reduce((acc, quantity, index) => {
-      return acc + quantity * products[index].price;
-    }, 0);
-
-    setTotalPrice(total);
-  }, [selectedQuantities, products]);
-
-    // Calcular el total inicial al cargar el componente
 useEffect(() => {
   const initialTotal = selectedQuantities.reduce((acc, quantity, index) => {
     return acc + quantity * products[index].price;
@@ -51,6 +43,10 @@ useEffect(() => {
 
   setTotalPrice(initialTotal);
 }, [products, selectedQuantities]);
+
+useEffect(() => {
+  setSelectedQuantities(Array(products.length).fill(0));
+}, [products]);
 
 
   const handleQuantityChange = (index: number, value: number) => {
