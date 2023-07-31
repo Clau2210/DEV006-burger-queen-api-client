@@ -24,7 +24,7 @@ interface ProductsProps {
 
 
 
-const ProductsList: React.FC<ProductsProps> = ({ products, onSendToKitchen }) => {
+const ProductsList: React.FC<ProductsProps> = ({ products, onSendToKitchen, clientName }) => {
   const [selectedQuantities, setSelectedQuantities] = useState<number[]>(
     Array(products.length).fill(0)
   );
