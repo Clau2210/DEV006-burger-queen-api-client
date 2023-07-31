@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/login/login";
 import WaiterBreakfast from "./components/waiter/waiterBreakfast";
 import WaiterLunch from "./components/waiter/waiterLunch";
+import Kitchen from "./components/orders/kitchen";
 
 
 
@@ -14,6 +15,8 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/waiterBreakfast" element={<WaiterBreakfast />} />
           <Route path="/waiterLunch" element={<WaiterLunch />} />
+          <Route path="/orderKitchen" element={<Kitchen />} />
+
         </Routes>
       </BrowserRouter>
   );
