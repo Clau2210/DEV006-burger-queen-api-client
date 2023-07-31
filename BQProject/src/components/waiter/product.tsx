@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import React, { useEffect, useState } from 'react';
+import { saveOrderToKitchen } from '../../api/createOrder';
 
 
 
@@ -15,29 +18,24 @@ export interface Product {
 }
 
 interface ProductsProps {
-  products: Product[
-
-  ];
+  products: Product[];
+  onSendToKitchen: (clientName: string) => void; // Agrega esta prop para recibir la función de envío a cocina desde el componente padre
 }
 
 
 
-const ProductsList: React.FC<ProductsProps> = ({ products }) => {
-  const [selectedQuantities, setSelectedQuantities] = useState<number[]>(Array(products.length).fill(0));
+const ProductsList: React.FC<ProductsProps> = ({ products, onSendToKitchen }) => {
+  const [selectedQuantities, setSelectedQuantities] = useState<number[]>(
+    Array(products.length).fill(0)
+  );
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
+const handleSendToKitchen = () => {
+  // Llama a la función de envío a cocina que proviene del componente padre (BreakfastLunchButtons)
+  onSendToKitchen(clientName);
+};
 
 
-  useEffect(() => {
-    // let total = 0;
-    const total = selectedQuantities.reduce((acc, quantity, index) => {
-      return acc + quantity * products[index].price;
-    }, 0);
-
-    setTotalPrice(total);
-  }, [selectedQuantities, products]);
-
-    // Calcular el total inicial al cargar el componente
 useEffect(() => {
   const initialTotal = selectedQuantities.reduce((acc, quantity, index) => {
     return acc + quantity * products[index].price;
@@ -46,14 +44,16 @@ useEffect(() => {
   setTotalPrice(initialTotal);
 }, [products, selectedQuantities]);
 
+useEffect(() => {
+  setSelectedQuantities(Array(products.length).fill(0));
+}, [products]);
+
 
   const handleQuantityChange = (index: number, value: number) => {
     // Copiar el array actual de selectedQuantities y actualizar la cantidad para el índice específico
     const updatedQuantities = [...selectedQuantities];
     updatedQuantities[index] = value;
-
     setSelectedQuantities(updatedQuantities);
-  
   };
 
   return (
@@ -105,6 +105,7 @@ useEffect(() => {
                           type="button"
                           // className="font-medium text-[#EE4D39] hover:text-[#E22F19]"
                           className="flex items-center justify-center rounded-md border border-transparent bg-[#E22f19] px-3 py-2 text-base font-medium text-white shadow-sm hover:bg-[#F4AB4D]"
+                          
                         >
                           Eliminar
                         </button>
@@ -127,6 +128,7 @@ useEffect(() => {
           <a
             href="#"
             className="flex items-center justify-center rounded-md border border-transparent bg-[#EE4D39] px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-[#F4AB4D]"
+            onClick={ handleSendToKitchen }
           >
             Enviar cocina
           </a>
