@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -30,13 +31,22 @@ function Login() {
      
       try {
         setErrorMessage('');
-        const resp = await login(email, password);        
+        const resp = await login(email, password);   
+        console.log('API Response:', resp);
+        if (resp !== null && resp.user && resp.user.id) {
+          const { accessToken, user: { id } } = resp;
+          localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('userId', id.toString());
+          console.log('ID del usuario:', id);
+          navigate('/waiterBreakfast');
+        } else {
+          setErrorMessage("login incorrecto");
+        }     
         //console.log('Response data:', resp.data);
         //const user = resp.data.user;
         //console.log('user:', user);
         //const role = user.role;
         //console.log('role: ', role);
-        navigate('/waiterBreakfast');
       } catch (e) {
         //alert("mal echo")
         setErrorMessage("login incorrecto");
