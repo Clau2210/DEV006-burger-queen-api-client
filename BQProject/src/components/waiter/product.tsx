@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { saveOrderToKitchen } from '../../api/createOrder';
 
 
-
 export interface Product {
   id: string;
   name: string;
