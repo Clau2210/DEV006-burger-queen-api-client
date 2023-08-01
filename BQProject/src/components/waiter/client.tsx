@@ -13,11 +13,12 @@ const ClientInput: React.FC<ClientInputProps> = ({ onClientNameChange }) => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
+    onClientNameChange(event.target.value);
   };
 
-  const handleSaveClientName = () => {
-    onClientNameChange(inputValue); // Llama a la función de devolución de llamada para enviar el nombre del cliente al componente padre
-  };
+  // const handleSaveClientName = () => {
+  //   onClientNameChange(inputValue); // Llama a la función de devolución de llamada para enviar el nombre del cliente al componente padre
+  // };
 
   return (
     <div className='bg-[#292D32]'>

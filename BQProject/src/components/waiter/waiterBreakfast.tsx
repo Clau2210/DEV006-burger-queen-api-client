@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-empty-interface */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -14,8 +18,9 @@ import ImageLogo from '../../assets/images/BQueenLogoPantallas.png';
 import { searchProducts } from '../../api/waiterBf';
 import  ClientInput  from '../waiter/client';
 import TableSelect from '../waiter/table';
-import ProductsList from '../waiter/product';
+import ProductsList, { Product } from '../waiter/product';
 import { format } from 'date-fns';
+import { saveOrderToKitchen } from '../../api/createOrder';
 
 function classNames(...classes: string[]): string {
   return classes.filter(Boolean).join(' ')
@@ -36,15 +41,29 @@ const navigation: NavItem[] = [
 
 
 // Definimos el tipo de props que nuestro componente va a aceptar. En este caso, no tiene ninguna prop, así que es un objeto vacío.
-type BreakfastLunchButtonsProps = {};
+// type BreakfastLunchButtonsProps = {};
+
+interface BreakfastLunchButtonsProps {}
 
 // Creamos el componente usando una función de flecha. Nota el uso de FC (Funcional Component) de React.
 const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
   // Estos son los handlers para los eventos de clic en los botones
-
-  const [products, setProducts] = useState([]);
+  const [userId, setUserId] = useState<number>(1);
+  const [products, setProducts] = useState<Product[]>([]);
   const [clientName, setClientName] = useState<string>(''); // Estado para almacenar el nombre del cliente
+  const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [status, setStatus] = useState<string>('pending');
+  const [dataEntry, setDataEntry] = useState<string>(format(new Date(), 'yyyy-MM-dd HH:mm:ss'));
 
+   // Calcular el precio total de los productos seleccionados
+   useEffect(() => {
+    const initialTotal = selectedProducts.reduce(
+      (acc, selectedProduct) => acc + selectedProduct.price * selectedProduct.qty,
+      0
+    );
+    setTotalPrice(initialTotal);
+  }, [selectedProducts]);
 
   useEffect(()=>{
     searchProducts()
@@ -59,15 +78,54 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
     setClientName(newName); // Almacena el nombre del cliente en el estado
   };
 
-  const handleSendToKitchen = (name: string) => {
+  const handleAddToOrder = (index: number, qty: number) => {
+    setSelectedProducts((prevSelected) => {
+      // Make sure selectedProducts has the same length as products
+      const updatedProducts = [...prevSelected];
+      while (updatedProducts.length < products.length) {
+        updatedProducts.push({ ...products[updatedProducts.length], qty: 0 });
+      }
+      updatedProducts[index].qty = qty;
+      return updatedProducts;
+    });
+  };
+
+  const handleSendToKitchen = async () => {
     // Aquí puedes utilizar la función para enviar a la cocina que necesites
     // Puedes enviar el nombre del cliente (name) y la lista de productos (products)
     // Por ejemplo, podrías usar una función saveOrderToKitchen(name, products)
     // saveOrderToKitchen(name, products).then(...).catch(...);
-    const currentDateTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
-    console.log(currentDateTime);
-    console.log('Nombre del cliente:', name);
-    console.log('Productos seleccionados:', products);
+    // const currentDateTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    // console.log(currentDateTime);
+    // console.log('Nombre del cliente:', name);
+    // console.log('Productos seleccionados:', products);
+    const filteredProducts = selectedProducts.filter((product) => product.qty > 0);
+    const token = localStorage.getItem('accessToken') || '';
+    const orderData = {
+      userId: userId, // Replace with the correct user ID
+      client: clientName,
+      products: filteredProducts,
+      status: status,
+      dataEntry: dataEntry,
+          // qty: selectedproduct.qty,
+          // id: selectedproduct.id,
+          // name: selectedproduct.name,
+          // price: selectedproduct.price,
+          // image: selectedproduct.image,
+          // type: selectedproduct.type,
+          // dateEntry: selectedproduct.dateEntry,
+        };
+
+    try {
+       // Asegúrate de pasar los argumentos requeridos a la función saveOrderToKitchen
+    await saveOrderToKitchen(orderData, token);
+     
+    console.log('Order created');
+    } catch (error) {
+      console.error('Error creating order:', error);
+      // Handle error, show an error message, etc.
+    }
+
   };
 
   return (
@@ -177,7 +235,8 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
         <ClientInput onClientNameChange={handleClientNameChange} />                   
         <TableSelect />
       </div>
-      <ProductsList products={products} onSendToKitchen={handleSendToKitchen} />
+      <ProductsList products={products} onQuantityChange={handleAddToOrder} onSendToKitchen={handleSendToKitchen}/>
+      {/* <ProductsList products={products} onSendToKitchen={handleSendToKitchen} /> */}
       {/* <ProductsList products={products} /> */}
     </>
 

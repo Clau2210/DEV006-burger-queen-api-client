@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import React, { useEffect, useState } from 'react';
@@ -5,6 +6,7 @@ import { saveOrderToKitchen } from '../../api/createOrder';
 
 
 export interface Product {
+  qty: number;
   id: string;
   name: string;
   price: number;
@@ -12,18 +14,19 @@ export interface Product {
   imageAlt: string;
   type: string;
   dateEntry: string;
-  quantity: number;
   href: string;
 }
 
 interface ProductsProps {
   products: Product[];
-  onSendToKitchen: (clientName: string) => void; // Agrega esta prop para recibir la función de envío a cocina desde el componente padre
+  //onSendToKitchen: (clientName: string) => void; // Agrega esta prop para recibir la función de envío a cocina desde el componente padre
+  onQuantityChange: (index: number, qty: number) => void;
+  onSendToKitchen: (selectedQuantities: number[]) => void;
 }
 
 
 
-const ProductsList: React.FC<ProductsProps> = ({ products, onSendToKitchen }) => {
+const ProductsList: React.FC<ProductsProps> = ({ products, onQuantityChange, onSendToKitchen }) => {
   const [selectedQuantities, setSelectedQuantities] = useState<number[]>(
     Array(products.length).fill(0)
   );
@@ -31,13 +34,14 @@ const ProductsList: React.FC<ProductsProps> = ({ products, onSendToKitchen }) =>
 
 const handleSendToKitchen = () => {
   // Llama a la función de envío a cocina que proviene del componente padre (BreakfastLunchButtons)
-  onSendToKitchen(clientName);
+  console.log("Clicked on Send to Kitchen");
+  onSendToKitchen(products, selectedQuantities, totalPrice)
 };
 
 
 useEffect(() => {
-  const initialTotal = selectedQuantities.reduce((acc, quantity, index) => {
-    return acc + quantity * products[index].price;
+  const initialTotal = selectedQuantities.reduce((acc, qty, index) => {
+    return acc + qty * products[index].price;
   }, 0);
 
   setTotalPrice(initialTotal);
@@ -53,6 +57,8 @@ useEffect(() => {
     const updatedQuantities = [...selectedQuantities];
     updatedQuantities[index] = value;
     setSelectedQuantities(updatedQuantities);
+      // Llama a la función onQuantityChange para notificar al componente padre sobre el cambio
+    onQuantityChange(index, value);
   };
 
   return (
@@ -81,7 +87,7 @@ useEffect(() => {
                         </h3>
                         <p className="ml-4">{product.price}</p>
                       </div>
-                      <select id={`quantity-${index}`} className="rounded-md m-3 p-1 " value={selectedQuantities[index]} onChange={(e)=>
+                      <select id={`qty-${index}`} className="rounded-md m-3 p-1 " value={selectedQuantities[index]} onChange={(e)=>
                         handleQuantityChange(index, Number(e.target.value))}
                         >
                         <option value="0">0</option>
@@ -98,7 +104,7 @@ useEffect(() => {
                         <p className="text-white">Total pedido: {product.price * selectedQuantities[index]}</p>
                     </div>
                     <div className="flex flex-1 items-end justify-between text-sm">
-                      {/* <p className="text-white">Cantidad {product.quantity}</p> */}
+                      {/* <p className="text-white">Cantidad {product.qty}</p> */}
                       <div className="flex">
                         <button
                           type="button"
@@ -127,7 +133,7 @@ useEffect(() => {
           <a
             href="#"
             className="flex items-center justify-center rounded-md border border-transparent bg-[#EE4D39] px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-[#F4AB4D]"
-            onClick={ handleSendToKitchen }
+            onClick={() => handleSendToKitchen(selectedQuantities)}
           >
             Enviar cocina
           </a>
