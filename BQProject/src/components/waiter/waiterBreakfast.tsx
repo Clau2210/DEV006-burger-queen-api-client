@@ -48,11 +48,13 @@ interface BreakfastLunchButtonsProps {}
 // Creamos el componente usando una función de flecha. Nota el uso de FC (Funcional Component) de React.
 const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
   // Estos son los handlers para los eventos de clic en los botones
-
+  const [userId, setUserId] = useState<number>(1);
   const [products, setProducts] = useState<Product[]>([]);
   const [clientName, setClientName] = useState<string>(''); // Estado para almacenar el nombre del cliente
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [status, setStatus] = useState<string>('pending');
+  const [dataEntry, setDataEntry] = useState<string>(format(new Date(), 'yyyy-MM-dd HH:mm:ss'));
 
    // Calcular el precio total de los productos seleccionados
    useEffect(() => {
@@ -97,28 +99,26 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
     // console.log(currentDateTime);
     // console.log('Nombre del cliente:', name);
     // console.log('Productos seleccionados:', products);
+    const filteredProducts = selectedProducts.filter((product) => product.qty > 0);
     const token = localStorage.getItem('accessToken') || '';
     const orderData = {
-      userId: 1, // Replace with the correct user ID
+      userId: userId, // Replace with the correct user ID
       client: clientName,
-      products: selectedProducts,
-      status: 'pending',
-      dataEntry: new Date().toISOString(),
-        // qty: selectedproduct.qty,
-        
+      products: filteredProducts,
+      status: status,
+      dataEntry: dataEntry,
+          // qty: selectedproduct.qty,
           // id: selectedproduct.id,
           // name: selectedproduct.name,
           // price: selectedproduct.price,
           // image: selectedproduct.image,
           // type: selectedproduct.type,
           // dateEntry: selectedproduct.dateEntry,
-    
-     
-    };
+        };
 
     try {
        // Asegúrate de pasar los argumentos requeridos a la función saveOrderToKitchen
-    await saveOrderToKitchen(selectedProducts, token);
+    await saveOrderToKitchen(orderData, token);
      
     console.log('Order created');
     } catch (error) {
