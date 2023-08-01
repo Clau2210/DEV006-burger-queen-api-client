@@ -55,7 +55,7 @@ interface StaffMember {
           <li key={index} className="flex justify-between gap-x-6 py-5">
             <div className="flex gap-x-4">
               <img
-                className="h-12 w-12 flex-none rounded-full bg-gray-50"
+                className="mx-20 h-12 w-12 flex-none rounded-full bg-gray-50"
                 src={`https://images.unsplash.com/photo-1${index + 1}?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80`}
                 alt={`Profile ${staffMember.name}`}
               />
