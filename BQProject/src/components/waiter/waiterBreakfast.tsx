@@ -40,10 +40,6 @@ const navigation: NavItem[] = [
 ];
 
 
-
-// Definimos el tipo de props que nuestro componente va a aceptar. En este caso, no tiene ninguna prop, así que es un objeto vacío.
-// type BreakfastLunchButtonsProps = {};
-
 interface BreakfastLunchButtonsProps {}
 
 // Creamos el componente usando una función de flecha. Nota el uso de FC (Funcional Component) de React.
@@ -84,14 +80,6 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
   };
 
   const handleSendToKitchen = async () => {
-    // Aquí puedes utilizar la función para enviar a la cocina que necesites
-    // Puedes enviar el nombre del cliente (name) y la lista de productos (products)
-    // Por ejemplo, podrías usar una función saveOrderToKitchen(name, products)
-    // saveOrderToKitchen(name, products).then(...).catch(...);
-    // const currentDateTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
-    // console.log(currentDateTime);
-    // console.log('Nombre del cliente:', name);
-    // console.log('Productos seleccionados:', products);
     const filteredProducts = selectedProducts.filter((product) => product.qty > 0);
     const token = localStorage.getItem('accessToken') || '';
     const orderData = {
@@ -100,13 +88,6 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
       products: filteredProducts,
       status: status,
       dataEntry: dataEntry,
-          // qty: selectedproduct.qty,
-          // id: selectedproduct.id,
-          // name: selectedproduct.name,
-          // price: selectedproduct.price,
-          // image: selectedproduct.image,
-          // type: selectedproduct.type,
-          // dateEntry: selectedproduct.dateEntry,
         };
 
     try {
@@ -129,7 +110,6 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
               <div className="relative flex h-16 items-center justify-between">
                 <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                  {/* Mobile menu button*/}
                   <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
@@ -229,8 +209,6 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
         <TableSelect />
       </div>
       <ProductsList products={products} onQuantityChange={handleAddToOrder} onSendToKitchen={handleSendToKitchen}/>
-      {/* <ProductsList products={products} onSendToKitchen={handleSendToKitchen} /> */}
-      {/* <ProductsList products={products} /> */}
     </>
 
   );
