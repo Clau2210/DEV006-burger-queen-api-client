@@ -21,6 +21,7 @@ import TableSelect from '../waiter/table';
 import ProductsList, { Product } from '../waiter/product';
 import { format } from 'date-fns';
 import { saveOrderToKitchen } from '../../api/createOrder';
+import { OrderProduct } from '../../api/order';
 
 function classNames(...classes: string[]): string {
   return classes.filter(Boolean).join(' ')
@@ -51,19 +52,11 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
   const [userId, setUserId] = useState<number>(1);
   const [products, setProducts] = useState<Product[]>([]);
   const [clientName, setClientName] = useState<string>(''); // Estado para almacenar el nombre del cliente
-  const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<OrderProduct[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [status, setStatus] = useState<string>('pending');
   const [dataEntry, setDataEntry] = useState<string>(format(new Date(), 'yyyy-MM-dd HH:mm:ss'));
 
-   // Calcular el precio total de los productos seleccionados
-   useEffect(() => {
-    const initialTotal = selectedProducts.reduce(
-      (acc, selectedProduct) => acc + selectedProduct.price * selectedProduct.qty,
-      0
-    );
-    setTotalPrice(initialTotal);
-  }, [selectedProducts]);
 
   useEffect(()=>{
     searchProducts()
@@ -83,7 +76,7 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
       // Make sure selectedProducts has the same length as products
       const updatedProducts = [...prevSelected];
       while (updatedProducts.length < products.length) {
-        updatedProducts.push({ ...products[updatedProducts.length], qty: 0 });
+        updatedProducts.push({ product: products[updatedProducts.length], qty: 0 });
       }
       updatedProducts[index].qty = qty;
       return updatedProducts;
