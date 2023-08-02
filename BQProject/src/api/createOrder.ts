@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Product }  from "../components/waiter/product";
+import {OrderProduct } from '../api/order'
 
 // export async function saveOrderToKitchen(products: Product[], token: string) {
 //     try {
@@ -28,7 +29,7 @@ import { Product }  from "../components/waiter/product";
 export async function saveOrderToKitchen(orderData: {
   userId: number;
   client: string;
-  products: Product[];
+  products: OrderProduct[];
   status: string;
   dataEntry: string;
 }, token: string) {
