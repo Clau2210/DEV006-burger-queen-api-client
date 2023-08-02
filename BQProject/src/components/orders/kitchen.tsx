@@ -34,9 +34,7 @@ const Kitchen: React.FC = () => {
                 {order.products.map((product)=>(
                   <div key={product.product.id}>
                     <p>{product.qty}  {product.product.name} </p>
-                    <div className="flex items-center mr-4">
-                        <input checked id="orange-checkbox" type="checkbox" value="" className="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                    </div>
+                    
                   </div>
                 ))}
 

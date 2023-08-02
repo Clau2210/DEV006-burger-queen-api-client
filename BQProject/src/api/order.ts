@@ -9,16 +9,18 @@ interface ProductDetail {
   dateEntry: string;
 }
 
-interface OrderProduct {
+
+
+export interface OrderProduct {
   qty: number;
-  product: ProductDetail;
+  products: ProductDetail;
 }
 
 export interface Order {
   id: number;
   userId: number;
   client: string;
-  products: OrderProduct[];
+  product: OrderProduct[];
   status: string;
   dataEntry: string;
   dateProcessed?: string;
@@ -30,7 +32,7 @@ export async function getOrderById(): Promise<Order[]> {
   try {
     const token = localStorage.getItem("accessToken") || '';
     console.log('tokem', token);
-    const response = await instance.get<Order>(`${endpoint}`, {
+    const response = await instance.get<Order[]>(`${endpoint}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
