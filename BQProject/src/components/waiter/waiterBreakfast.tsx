@@ -204,7 +204,6 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
       </Disclosure>
     
       <div className='flex justify-center bg-[#292D32]'>
-        {/* <ClientInput /> */}
         <ClientInput onClientNameChange={handleClientNameChange} />                   
         <TableSelect />
       </div>

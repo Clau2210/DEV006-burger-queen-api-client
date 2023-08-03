@@ -32,7 +32,7 @@ const Kitchen: React.FC = () => {
                 Ticket: #{order.id}
                 <h1>Productos: </h1>
                 {order.products.map((product)=>(
-                  <div key={product.product.id}>
+                  <div key={product.product.id} >
                     <p>{product.qty}  {product.product.name} </p>
                     
                   </div>
