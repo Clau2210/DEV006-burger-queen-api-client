@@ -7,7 +7,7 @@ import { saveOrderToKitchen } from '../../api/createOrder';
 
 export interface Product {
   qty: number;
-  id: string;
+  id: number;
   name: string;
   price: number;
   image: string;
@@ -104,11 +104,9 @@ useEffect(() => {
                         <p className="text-white">Total pedido: {product.price * selectedQuantities[index]}</p>
                     </div>
                     <div className="flex flex-1 items-end justify-between text-sm">
-                      {/* <p className="text-white">Cantidad {product.qty}</p> */}
                       <div className="flex">
                         <button
                           type="button"
-                          // className="font-medium text-[#EE4D39] hover:text-[#E22F19]"
                           className="flex items-center justify-center rounded-md border border-transparent bg-[#E22f19] px-3 py-2 text-base font-medium text-white shadow-sm hover:bg-[#F4AB4D]"
                           
                         >

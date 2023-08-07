@@ -3,13 +3,12 @@ import { Product }  from "../components/waiter/product";
 
 const endpoint = "products";
 
-export const searchProducts = async (): Promise<Product[]> => {
+export const searchProducts = async (type = 'Desayuno'): Promise<Product[]> => {
   try {
     const token = localStorage.getItem("accessToken") || '';
     console.log('tokem', token);
-    const response = await instance.get<Product[]>(endpoint, {
+    const response = await instance.get<Product[]>(endpoint + `?type=${type}`, {
       headers: {
-        // "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFuaXRhLmJvcmdAc3lzdGVycy54eXoiLCJpYXQiOjE2OTAzMTM3NjcsImV4cCI6MTY5MDMxNzM2Nywic3ViIjoiMSJ9.8Hbw5KFKeKpgz37vyLauARTrEiB0nRZ9_lnZOZ2ZsAM"
         Authorization: `Bearer ${token}`,
       },
     });
