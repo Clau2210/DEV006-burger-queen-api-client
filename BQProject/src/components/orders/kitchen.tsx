@@ -24,7 +24,7 @@ const Kitchen: React.FC = () => {
       </div>
       {orders ? (
         <>
-          {orders.map((order) => (
+          {orders?.map((order) => (
             <div
               className="h-60 m-10 p-8 bg-[#6C7075] flex flex-col rounded-md text-white font-['Amiko'] text-sm "
               key={order.id}
@@ -36,7 +36,7 @@ const Kitchen: React.FC = () => {
                 <br />
                 Mesa: {order.table}
                 <h1>Productos: </h1>
-                {order.products.map((product) => (
+                {order.products?.map((product)=>(
                   <div key={product.product.id}>
                     <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                       <input
