@@ -5,6 +5,7 @@ import {OrderProduct } from '../api/order'
 export async function saveOrderToKitchen(orderData: {
   userId: number;
   client: string;
+  table: number;
   products: OrderProduct[];
   status: string;
   dataEntry: string;

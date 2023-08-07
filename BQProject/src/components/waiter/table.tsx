@@ -1,10 +1,10 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Listbox } from '@headlessui/react';
 import { Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 
 
-interface Person {
+export interface Table {
   id: number;
   name: string;
   avatar: string;
@@ -14,8 +14,12 @@ function classNames(...classes: string[]): string {
   return classes.filter(Boolean).join(' ')
 }
 
-const TableSelect: React.FC = () => {
-  const people: Person[] = [
+type TableSelectProps = {
+  onChangeTable: (table: Table) => void,
+}
+
+const TableSelect: React.FC<TableSelectProps> = ({ onChangeTable }) => {
+  const people: Table[] = [
     {
       id: 1,
       name: "Mesa 1",
@@ -78,7 +82,11 @@ const TableSelect: React.FC = () => {
     },
   ];
 
-  const [selected, setSelected] = useState<Person>(people[3]);
+  const [selected, setSelected] = useState<Table>(people[3]);
+
+  useEffect(() => {
+    onChangeTable(selected);
+  }, [selected]);
 
   return (
     <Listbox value={selected} onChange={setSelected}>

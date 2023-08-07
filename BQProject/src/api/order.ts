@@ -13,14 +13,14 @@ interface ProductDetail {
 
 export interface OrderProduct {
   qty: number;
-  products: ProductDetail;
+  product: ProductDetail;
 }
 
 export interface Order {
   id: number;
   userId: number;
   client: string;
-  product: OrderProduct[];
+  products: OrderProduct[];
   status: string;
   dataEntry: string;
   dateProcessed?: string;

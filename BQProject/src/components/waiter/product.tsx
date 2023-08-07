@@ -7,7 +7,7 @@ import { saveOrderToKitchen } from '../../api/createOrder';
 
 export interface Product {
   qty: number;
-  id: string;
+  id: number;
   name: string;
   price: number;
   image: string;

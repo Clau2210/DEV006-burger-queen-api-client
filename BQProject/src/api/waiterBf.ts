@@ -3,11 +3,11 @@ import { Product }  from "../components/waiter/product";
 
 const endpoint = "products";
 
-export const searchProducts = async (): Promise<Product[]> => {
+export const searchProducts = async (type = 'Desayuno'): Promise<Product[]> => {
   try {
     const token = localStorage.getItem("accessToken") || '';
     console.log('tokem', token);
-    const response = await instance.get<Product[]>(endpoint, {
+    const response = await instance.get<Product[]>(endpoint + `?type=${type}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
