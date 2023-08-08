@@ -158,17 +158,17 @@ const Waiter = () => {
                 onChangeQuantity={(quantity: number) => onHandleChangeQuantity(quantity, item.id)}/>  
             ))}         
           </div>
-          <div className="bg-[#6C7075] m-6 p-5 ">
+          <div className="flex flex-col rounded-md bg-[#6C7075] m-6 p-5 text-white min-w-[50%]">
             {selectedProductsValues().map(({qty, product}) => <div key={product.id}>
-              {product.name} - {qty} - {product.price*qty}
+              {qty}    {product.name}   ${product.price*qty}
             </div>) }
 
-            <div>
-              Total: {totalOrder()}
+            <div className="my-10">
+              Total: ${totalOrder()}
             </div>
 
             <button 
-              className="flex items-center justify-center rounded-md border border-transparent bg-[#EE4D39] px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-[#F4AB4D]"
+              className="align-center rounded-md border border-transparent bg-[#EE4D39] px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-[#F4AB4D]"
               onClick={handleCreateOrder}
               >
               Enviar a cocina
