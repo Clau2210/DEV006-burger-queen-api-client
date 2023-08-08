@@ -1,8 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import React, { useEffect, useState } from 'react';
-import { saveOrderToKitchen } from '../../api/createOrder';
 
 
 export interface Product {
