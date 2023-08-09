@@ -19,10 +19,11 @@ interface NavItem {
 const navigation: NavItem[] = [
   { name: 'Desayuno', href: '#', current: true },
   { name: 'Almuerzo', href: '#', current: false },
-  { name: 'Cena', href: '#', current: false },
+  //{ name: 'Cena', href: '#', current: false },
 ];
 
 // type ProductItem = { qty: number, product: Product }
+
 
 type ProductItemDictionary = {
   [key: number] : OrderProduct;
@@ -40,7 +41,7 @@ const getProductById = (products: Product[], id: number  ): Product | undefined 
 
 
 const Waiter = () => {
-
+  const [isModalOpen, setIsModalOpen] = useState(false); 
   const [selectedProducts, setSelectedProducts] = useState<ProductItemDictionary>({});
   const [products, setProducts] = useState<Product[]>([]);
   const [clientName, setClientName] = useState('');
@@ -123,8 +124,8 @@ const Waiter = () => {
     try {
       // Asegúrate de pasar los argumentos requeridos a la función saveOrderToKitchen
       await saveOrderToKitchen(orderData, token);
-      
       console.log('Order created');
+      setIsModalOpen(true); 
     } catch (error) {
       console.error('Error creating order:', error);
       // Handle error, show an error message, etc.
@@ -147,7 +148,7 @@ const Waiter = () => {
             setTable(tableParam);
           }}/>
         </div>
-        <div className="flex">
+        <div className="flex flex-col">
           <div>
             {products.map(((item) => 
               <ProductItem 
@@ -155,7 +156,10 @@ const Waiter = () => {
                 name={item.name} 
                 price={item.price} 
                 quantity={selectedProducts[item.id]?.qty | 0}
-                onChangeQuantity={(quantity: number) => onHandleChangeQuantity(quantity, item.id)}/>  
+                onChangeQuantity={(quantity: number) => onHandleChangeQuantity(quantity, item.id)
+                }
+                image={item.image}
+                />  
             ))}         
           </div>
           <div className="flex flex-col rounded-md bg-[#6C7075] m-6 p-5 text-white min-w-[50%]">
@@ -167,6 +171,7 @@ const Waiter = () => {
               Total: ${totalOrder()}
             </div>
 
+            
             <button 
               className="align-center rounded-md border border-transparent bg-[#EE4D39] px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-[#F4AB4D]"
               onClick={handleCreateOrder}
@@ -176,6 +181,29 @@ const Waiter = () => {
           </div>
         </div>
       </div>
+      <div
+        className={`fixed inset-0 z-10 ${
+          isModalOpen ? 'block' : 'hidden'
+        }`}
+        onClick={() => setIsModalOpen(false)}
+      >
+        <div className="fixed inset-0 bg-black opacity-30 items-center justify-center"></div>
+        <div className="fixed inset-0 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-md shadow-md text-center">
+            <p className="text-lg font-semibold mb-4">
+              ¡Orden creada con éxito!
+            </p>
+            <p>Tu orden ha sido enviada a la cocina.</p>
+            <button
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+
     </BaseLayout>
   )
 }
