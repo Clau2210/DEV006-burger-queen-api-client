@@ -7,6 +7,7 @@ interface ProductDetail {
   image: string;
   type: string;
   dateEntry: string;
+  table: string;
 }
 
 
