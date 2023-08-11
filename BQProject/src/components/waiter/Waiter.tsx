@@ -9,6 +9,7 @@ import ClientInput from "./client";
 import TableSelect, { Table } from "./table";
 import { saveOrderToKitchen } from "../../api/createOrder";
 import { OrderProduct } from "../../api/order";
+import { Button } from "../core/Button";
 
 interface NavItem {
   name: string;
@@ -54,7 +55,7 @@ const Waiter = () => {
             key={item.name}
             href={item.href}
             className={classNames(
-              item.current ? 'bg-[#EE4D39] text-[#292D32' : 'text-[#292D32] bg-[#F4AB4D] hover:text-white',
+              item.current ? 'bg-[#EE4D39] text-[#292D32]' : 'text-[#292D32] bg-[#F4AB4D] hover:text-white',
               'rounded-md px-6 py-3 text-sm font-medium'
             )}
             aria-current={item.current ? 'page' : undefined}
@@ -167,12 +168,7 @@ const Waiter = () => {
               Total: ${totalOrder()}
             </div>
 
-            <button 
-              className="align-center rounded-md border border-transparent bg-[#EE4D39] px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-[#F4AB4D]"
-              onClick={handleCreateOrder}
-              >
-              Enviar a cocina
-            </button>
+            <Button label="Enviar a cocina" onClick={handleCreateOrder} />            
           </div>
         </div>
       </div>
