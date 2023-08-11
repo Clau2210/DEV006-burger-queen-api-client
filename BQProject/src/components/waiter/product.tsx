@@ -32,6 +32,8 @@ const handleSendToKitchen = () => {
   // Llama a la función de envío a cocina que proviene del componente padre (BreakfastLunchButtons)
   console.log("Clicked on Send to Kitchen");
   onSendToKitchen(products, selectedQuantities, totalPrice)
+  const resetQuantities = Array(products.length).fill(0);
+  setSelectedQuantities(resetQuantities);
 };
 
 
