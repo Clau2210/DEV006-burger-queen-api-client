@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import BaseLayout from "../core/BaseLayout";
 import { searchProducts } from "../../api/waiterBf";
 import React, { useState, useEffect } from 'react';
