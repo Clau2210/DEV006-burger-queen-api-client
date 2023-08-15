@@ -106,6 +106,10 @@ const Waiter = () => {
       await saveOrderToKitchen(orderData, token);
       console.log('Order created');
       setIsModalOpen(true);
+
+      setSelectedProducts({});
+      setClientName(' ');
+
     } catch (error) {
       console.error('Error creating order:', error);
       // Handle error, show an error message, etc.
@@ -120,7 +124,9 @@ const Waiter = () => {
           <ClientInput onClientNameChange={(name) => {
             console.log('client Name: ', name);
             setClientName(name)
-          }}/>
+          }}
+            value={clientName}
+          />
           <TableSelect onChangeTable={(tableParam) => {
             console.log('selected Table: ', tableParam)
             setTable(tableParam);
