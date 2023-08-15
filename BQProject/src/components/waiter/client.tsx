@@ -2,19 +2,24 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // Create a new file ClientInput.tsx
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 
 interface ClientInputProps {
   onClientNameChange: (newName: string) => void; // Función de devolución de llamada para enviar el nombre del cliente al componente padre
+  value: string; 
 }
 
-const ClientInput: React.FC<ClientInputProps> = ({ onClientNameChange }) => {
+const ClientInput: React.FC<ClientInputProps> = ({ onClientNameChange, value }) => {
   const [inputValue, setInputValue] = useState<string>('');
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
+
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     setInputValue(event.target.value);
     onClientNameChange(event.target.value);
-  };
+  }
 
   // const handleSaveClientName = () => {
   //   onClientNameChange(inputValue); // Llama a la función de devolución de llamada para enviar el nombre del cliente al componente padre

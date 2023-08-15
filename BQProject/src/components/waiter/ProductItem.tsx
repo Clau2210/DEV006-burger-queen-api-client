@@ -11,6 +11,11 @@ type ProductItemProps = {
 const ProductItem: React.FC<ProductItemProps>  = (props) => {
   const { name, price, image, onChangeQuantity } = props;
   const [ quantity, setQuantity ] = useState(props.quantity | 0);
+
+  useEffect(() => {
+    setQuantity(props.quantity || 0);
+  }, [props.quantity]);
+  
   const addOne = () => {
     setQuantity(quantity+1);
   }
@@ -19,6 +24,7 @@ const ProductItem: React.FC<ProductItemProps>  = (props) => {
       setQuantity(quantity-1);
     }
   }
+
   useEffect(() => {
     console.log('quantity', quantity)
     if(onChangeQuantity){
