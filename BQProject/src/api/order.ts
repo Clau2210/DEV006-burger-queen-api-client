@@ -10,8 +10,6 @@ interface ProductDetail {
   table: string;
 }
 
-
-
 export interface OrderProduct {
   qty: number;
   product: ProductDetail;
@@ -29,11 +27,11 @@ export interface Order {
 
 const endpoint = "orders";
 
-export async function getOrderById(): Promise<Order[]> {
+export async function getAllOrders(filter = ''): Promise<Order[]> {
   try {
     const token = localStorage.getItem("accessToken") || '';
     console.log('tokem', token);
-    const response = await instance.get<Order[]>(`${endpoint}`, {
+    const response = await instance.get<Order[]>(`${endpoint}?${filter}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -47,4 +45,3 @@ export async function getOrderById(): Promise<Order[]> {
     throw error;
   }
 }
-

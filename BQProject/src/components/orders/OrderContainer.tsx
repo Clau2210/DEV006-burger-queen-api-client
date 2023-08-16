@@ -5,9 +5,12 @@ import { CheckBox } from "../core/CheckBox";
 
 type OrderContainerProps = {
   order: Order,
+  showCheck: boolean;
+  onClick: () => void;
+  buttonLabel:string;
 };
 
-const OrderContainer = ( {order} : OrderContainerProps ) => {
+const OrderContainer = ( {order, showCheck = true, onClick, buttonLabel} : OrderContainerProps ) => {
   const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
 
   const handleCheckboxChange = (productId: number, isChecked: boolean) => {
@@ -18,10 +21,10 @@ const OrderContainer = ( {order} : OrderContainerProps ) => {
     }
   }
 
-  const allProductsSelected = selectedProducts.length === order.products.length;
+  const allProductsSelected = selectedProducts.length === order.products.length || !showCheck;
 
   const handleReadyOrder = () => {
-    console.log("handleReadyOrder")
+    onClick();
   }
 
   return (
@@ -34,16 +37,17 @@ const OrderContainer = ( {order} : OrderContainerProps ) => {
         Ticket: #{order.id}
         <br />
         Mesa: {order.table}
-        <h1>Productos: </h1>
+        <h1>Productos Listos: </h1>
         {order.products.map((product) => (
           <div key={product.product.id}>
-            <CheckBox 
+            {showCheck && <CheckBox 
               label={`${product.qty} ${product.product.name}`}               
               onChange={checked => handleCheckboxChange(product.product.id, checked)} 
-            />
+            /> }
+            {!showCheck && <label className="m-5 p-5">{`${product.qty} ${product.product.name}`}</label>}
           </div>
         ))}           
-        <Button label="Por Entregar" disabled={!allProductsSelected} onClick={handleReadyOrder}/>        
+        <Button label={buttonLabel} disabled={!allProductsSelected} onClick={handleReadyOrder}/>        
       </div>
     </div>
   )
