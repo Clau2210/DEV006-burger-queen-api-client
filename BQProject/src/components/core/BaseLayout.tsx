@@ -39,7 +39,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ buttons, children }) => (
                   </div>
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                  <button
+                  <button 
                     type="button"
                     className="rounded-full bg-[#292D32] p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-[#f14850] focus:ring-offset-2 focus:ring-offset-gray-800"
                   >
