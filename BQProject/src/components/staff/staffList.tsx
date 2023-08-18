@@ -96,9 +96,3 @@ interface User {
   };
   
   export default Staff;
-  
-  
-  
-  
-  
-  

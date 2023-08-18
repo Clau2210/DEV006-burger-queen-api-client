@@ -10,6 +10,7 @@ import { OrderWaiter } from "./components/orders/OrderWaiter";
 
 
 
+
 const App: React.FC = () => {
   const [deletedProductIds, setDeletedProductIds] = useState<number[]>([]);
   const handleDeleteProduct = (productId: number) => {
