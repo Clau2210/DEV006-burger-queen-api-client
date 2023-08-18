@@ -1,84 +1,23 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/adjacent-overload-signatures */
-/* eslint-disable @typescript-eslint/ban-types */
-
-
-import React, { useState, useEffect, Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, Bars3Icon, BellIcon } from '@heroicons/react/24/outline';
+import { Fragment } from 'react';
+
 import ImageLogo from '../../assets/images/BQueenLogoPantallas.png';
-import { searchProducts } from '../../api/waiterBf';
-import  ClientInput  from '../waiter/client';
-import TableSelect from '../waiter/table';
-import ProductsList from '../waiter/product';
-import { format } from 'date-fns';
+import { classNames } from './utils';
 
-function classNames(...classes: string[]): string {
-  return classes.filter(Boolean).join(' ')
-}
+type BaseLayoutProps = {
+  buttons?: () => JSX.Element;
+  children?: React.ReactNode;
+};
 
-interface NavItem {
-  name: string;
-  href: string;
-  current: boolean;
-}
-
-
-const navigation: NavItem[] = [
-  { name: 'Desayuno', href: '#', current: true },
-  { name: 'Almuerzo y cena', href: '#', current: false },
-];
-
-
-
-// Definimos el tipo de props que nuestro componente va a aceptar. En este caso, no tiene ninguna prop, así que es un objeto vacío.
-type BreakfastLunchButtonsProps = {};
-
-// Creamos el componente usando una función de flecha. Nota el uso de FC (Funcional Component) de React.
-const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
-  // Estos son los handlers para los eventos de clic en los botones
-
-  const [products, setProducts] = useState([]);
-  const [clientName, setClientName] = useState<string>(''); // Estado para almacenar el nombre del cliente
-
-
-  useEffect(()=>{
-    searchProducts()
-    .then((response) => {
-      console.log('Esta es una respuesta a useEffect');
-      setProducts(response);
-    })
-    .catch();
-  }, []);
-  
-  const handleClientNameChange = (newName: string) => {
-    setClientName(newName); // Almacena el nombre del cliente en el estado
-  };
-
-  const handleSendToKitchen = (name: string) => {
-    // Aquí puedes utilizar la función para enviar a la cocina que necesites
-    // Puedes enviar el nombre del cliente (name) y la lista de productos (products)
-    // Por ejemplo, podrías usar una función saveOrderToKitchen(name, products)
-    // saveOrderToKitchen(name, products).then(...).catch(...);
-    const currentDateTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
-    console.log(currentDateTime);
-    console.log('Nombre del cliente:', name);
-    console.log('Productos seleccionados:', products);
-  };
-
-  return (
-    <>
-      <Disclosure as="nav" className="bg-[#292D32] py-10">
-        {({ open }) => (
+const BaseLayout: React.FC<BaseLayoutProps> = ({ buttons, children }) => (
+  <>
+    <Disclosure as="nav" className="bg-[#292D32] py-10">        
+      {({ open }) => (
           <>
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
               <div className="relative flex h-16 items-center justify-between">
                 <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                  {/* Mobile menu button*/}
                   <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
@@ -93,24 +32,14 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
                   </div>
                   <div className="hidden sm:ml-6 sm:block">
                     <div className="flex space-x-4">
-                      {navigation.map((item) => (
-                        <a
-                          key={item.name}
-                          href={item.href}
-                          className={classNames(
-                            item.current ? 'bg-[#EE4D39] text-[#292D32' : 'text-[#292D32] bg-[#F4AB4D] hover:text-white',
-                            'rounded-md px-6 py-3 text-sm font-medium'
-                          )}
-                          aria-current={item.current ? 'page' : undefined}
-                        >
-                          {item.name}
-                        </a>
-                      ))}
+                      
+                      {buttons && <div>{buttons()}</div>}  
+
                     </div>
                   </div>
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                  <button
+                  <button 
                     type="button"
                     className="rounded-full bg-[#292D32] p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-[#f14850] focus:ring-offset-2 focus:ring-offset-gray-800"
                   >
@@ -170,19 +99,13 @@ const BreakfastLunchButtons: React.FC<BreakfastLunchButtonsProps> = () => {
           </>
         )}
 
-      </Disclosure>
-    
-      <div className='flex justify-center bg-[#292D32]'>
-        {/* <ClientInput /> */}
-        <ClientInput onClientNameChange={handleClientNameChange} />                   
-        <TableSelect />
-      </div>
-      <ProductsList products={products} onSendToKitchen={handleSendToKitchen} />
-      {/* <ProductsList products={products} /> */}
-    </>
 
-  );
-};
+    </Disclosure>
 
-export default BreakfastLunchButtons;
+    <div className='flex justify-center bg-[#292D32]'>
+      {children}
+    </div>
+  </>  
+);
 
+export default BaseLayout;

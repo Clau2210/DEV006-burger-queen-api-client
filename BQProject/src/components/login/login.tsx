@@ -1,8 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable react-refresh/only-export-components */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
 import { login } from '../../api/login';
@@ -38,17 +34,11 @@ function Login() {
           localStorage.setItem('accessToken', accessToken);
           localStorage.setItem('userId', id.toString());
           console.log('ID del usuario:', id);
-          navigate('/waiterBreakfast');
+          navigate('/waiter');
         } else {
           setErrorMessage("login incorrecto");
         }     
-        //console.log('Response data:', resp.data);
-        //const user = resp.data.user;
-        //console.log('user:', user);
-        //const role = user.role;
-        //console.log('role: ', role);
       } catch (e) {
-        //alert("mal echo")
         setErrorMessage("login incorrecto");
       }
     }

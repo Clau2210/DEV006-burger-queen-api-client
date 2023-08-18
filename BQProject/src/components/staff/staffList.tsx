@@ -1,115 +1,98 @@
+import React, { useEffect, useState } from 'react';
+import AddStaff from './addStaff.tsx';
+import {  User } from '../api/staff.api.ts'; 
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import ImageLogo from "../../assets/images/BQueenLogoPantallas.png";
 
-interface StaffMember {
-    name: string;
-    email: string;
-    role: string;
-    lastSeen: string;
-    online?: boolean;
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+ 
   }
-
   const Staff: React.FC = () => {
-    const staffData: StaffMember[] = [
-      {
-        name: 'Leslie Alexander',
-        email: 'leslie.alexander@example.com',
-        role: 'Co-Founder / CEO',
-        lastSeen: '2023-01-23T13:23Z',
-      },
-      {
-        name: 'Michael Foster',
-        email: 'michael.foster@example.com',
-        role: 'Co-Founder / CTO',
-        lastSeen: '2023-01-23T13:23Z',
-      },
-      {
-        name: 'Dries Vincent',
-        email: 'dries.vincent@example.com',
-        role: 'Business Relations',
-        lastSeen: '2023-01-23T13:23Z',
-        online: true,
-      },
-      {
-        name: 'Lindsay Walton',
-        email: 'lindsay.walton@example.com',
-        role: 'Front-end Developer',
-        lastSeen: '2023-01-23T13:23Z',
-      },
-      {
-        name: 'Courtney Henry',
-        email: 'courtney.henry@example.com',
-        role: 'Designer',
-        lastSeen: '2023-01-23T13:23Z',
-      },
-      {
-        name: 'Tom Cook',
-        email: 'tom.cook@example.com',
-        role: 'Director of Product',
-        lastSeen: '2023-01-23T13:23Z',
-        online: true,
-      },
-    ];
+    const [users, setUsers] = useState<User[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false); // Initialize as false
+    const [newUser, setNewUser] = useState<User>({
+      id: 0,
+      name: '',
+      email: '',
+      role: '',
+      online: true,
+    });
   
+    useEffect(() => {
+      const fetchUsers = async () => {
+        try {
+          const usersData = await getUsers();
+          setUsers(usersData);
+        } catch (error) {
+          // Handle error if needed
+        }
+      };
+  
+      fetchUsers();
+    }, []);
+  
+    const addUser = (newUser: User) => {
+      setUsers([...users, newUser]);
+      setIsModalOpen(false); // Close the modal after adding user
+    };
+
+ 
     return (
-      <ul role="list" className="divide-y divide-gray-100">
-        {staffData.map((staffMember, index) => (
-          <li key={index} className="flex justify-between gap-x-6 py-5">
-            <div className="flex gap-x-4">
-              <img
-                className="mx-20 h-12 w-12 flex-none rounded-full bg-gray-50"
-                src={`https://images.unsplash.com/photo-1${index + 1}?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80`}
-                alt={`Profile ${staffMember.name}`}
-              />
-              <div className="min-w-0 flex-auto">
-                <p className="text-sm font-semibold leading-6 text-[#f8fafc]">{staffMember.name}</p>
-                <p className="mt-1 truncate text-xs leading-5 text-[#f8fafc]">{staffMember.email}</p>
-              </div>
-            </div>
-            <div className="hidden sm:flex sm:flex-col sm:items-end">
-              <p className="text-sm leading-6 text-[#f8fafc]">{staffMember.role}</p>
-              {staffMember.online ? (
-                <div className="mt-1 flex items-center gap-x-1.5">
-                  <div className="flex-none rounded-full bg-emerald-500/20 p-1">
-                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
-                  </div>
-                  <p className="text-xs leading-5 text-[#f8fafc]">Online</p>
+      <div className="bg-[#292D32]">
+        <div>
+          <h1 className="text-2xl text-center font-semibold mt-20 mb-4 text-[#f8fafc]">LISTA DE EMPLEADOS</h1>
+        </div>
+        <div className="flex justify-end">
+          <img
+            className="my-0 w-[250px] justify-center"
+            src={ImageLogo}
+            alt="Burguer Queen"
+          />
+        </div>
+        <div className='flex justify-between mb-4 ml-10'>
+          <h4 className="text-2xl font-semibold mb-4 text-[#EE4D39]">Nombre completo</h4>
+          <h4 className="text-2xl font-semibold mb-4 text-[#EE4D39]">Cargo</h4>
+        </div>
+  
+        <button
+          className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
+          onClick={() => setIsModalOpen(true)}
+        >
+          Agregar
+        </button>
+  
+        <ul role="list" className="divide-y divide-gray-100">
+          {users.map((user) => (
+            <li key={user.id} className="flex justify-between gap-x-6 py-5">
+              <div className="flex gap-x-4">
+                <div className="min-w-0 flex-auto">
+                  <p className="text-sm font-semibold leading-6 text-[#f8fafc]">{user.name}</p>
+                  <p className="mt-1 truncate text-xs leading-5 text-[#f8fafc]">{user.email}</p>
+                  <p className="mt-1 truncate text-xs leading-5 text-[#f8fafc]">{user.role}</p>
                 </div>
-              ) : (
-                <p className="mt-1 text-xs leading-5 text-[#f8fafc]">
-                  Last seen <time dateTime={staffMember.lastSeen}>{calculateTimeAgo(staffMember.lastSeen)}</time>
-                </p>
-              )}
-            </div>
-          </li>
-        ))}
-      </ul>
+              </div>
+              <div className="hidden sm:flex sm:flex-col sm:items-end">
+                <p className="text-sm font-semibold leading-6 mr-10 text-[#f8fafc]">{user.role}</p>
+                <FaEdit className="cursor-pointer text-gray-300 hover:text-[#EE4D39] h-15 w-15" />
+                <FaTrash className="mx-5 cursor-pointer text-gray-300 hover:text-[#EE4D39] h-15 w-15" />
+              </div>
+            </li>
+          ))}
+        </ul>
+  
+        <AddStaff
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onAddUser={addUser}
+          newUser={newUser}
+          setNewUser={setNewUser}
+        />
+      </div>
     );
   };
   
-  // Function to calculate the time difference from a given date
-  const calculateTimeAgo = (dateString: string): string => {
-    const currentTime = new Date();
-    const lastSeenTime = new Date(dateString);
-    const timeDifference = Math.floor((currentTime.getTime() - lastSeenTime.getTime()) / (1000 * 60 * 60));
-    return `${timeDifference}h ago`;
-  };
-  
-// const Staff: React.FC = () => {
-//     return (
-
-
-        
-//       <div className="bg-gray-200 p-4 rounded-lg shadow-md">
-//         <h2 className="text-xl font-semibold mb-2">Staff Information</h2>
-//         <ul>
-//           {/* Add staff information here */}
-//           <li>Name: John Doe</li>
-//           <li>Position: Manager</li>
-//           {/* Add more staff information as needed */}
-//         </ul>
-//       </div>
-//     );
-//   };
-
-
-
-export default Staff;
+  export default Staff;

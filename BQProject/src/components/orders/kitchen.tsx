@@ -1,26 +1,44 @@
-import ImageLogo from '../../assets/images/BQueenLogoPantallas.png';
+import React, { useEffect, useState } from "react";
+import { getAllOrders, Order } from "../../api/order";
+import "@fontsource/atma";
+import "@fontsource/amiko";
+import { OrderContainer } from "./OrderContainer";
+import BaseLayout from "../core/BaseLayout";
+import { updateOrderStatus } from "../../api/orderswaiter";
 
 const Kitchen: React.FC = () => {
-  return (
-    <>
-    <div className='bg-[#292D32]'>
-      <div className= 'flex justify-end'>
-      <img className="my-0 w-[150px] justify-center"
-           src={ImageLogo}
-           alt="Burguer Queen"
-      />
-      </div>
-      <div className='h-40 m-20 bg-[#6C7075] flex rounded-md'>
-        <div>
-          aqui la orden
-          <button className='flex items-center justify-center rounded-md border border-transparent bg-[#EE4D39] px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-[#F4AB4D]'>
-            Por entregar
-          </button>
-        </div>
-      </div>
-    </div>
-    </>
-  )
-}
+  const [orders, setOrders] = useState<Order[]>([]);
 
-export default Kitchen;
+  useEffect(() => {
+    getAllOrders('status=pending')
+      .then((data) => setOrders(data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  const handleReadyOrder = (orderId: number) => {
+    console.log("handleReadyOrder")
+    updateOrderStatus(orderId, 'delivered').then(()=>{
+      setOrders(orders.filter((order)=>orderId != order.id))
+    }).catch(()=>{
+      console.log('error al guardar')
+    })
+  }
+
+  return (
+    <BaseLayout>
+      <div className="flex flex-col min-w-[60%]">
+        {orders ? (
+          <>
+            {orders.map((order) => (
+              <OrderContainer order={order} key={order.id} showCheck={true} onClick={() => handleReadyOrder(order.id)} buttonLabel={"Por Entregar"}/>
+            ))}
+          </>
+        ) : (
+          <p>Cargando ordenes...</p>
+        )}
+      </div>
+    </BaseLayout>
+  );
+};
+
+export { Kitchen };
